@@ -72,3 +72,4 @@ src/
 - Follow Mermaid's configuration pattern
 - Support theming through CSS custom properties
 - Maintain compatibility with Mermaid's rendering pipeline
+- Run typecheck and lint after completing tasks and be sure ALWAYS pass.
