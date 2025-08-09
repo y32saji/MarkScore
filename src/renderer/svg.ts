@@ -377,10 +377,10 @@ export class SVGMusicRenderer implements IMusicRenderer {
       tagName,
       attributes
     }
-    if (children.length > 0) {
+    if (children && children.length > 0) {
       element.children = children
     }
-    if (textContent) {
+    if (textContent !== undefined && textContent !== '') {
       element.textContent = textContent
     }
     return element
@@ -393,15 +393,18 @@ export class SVGMusicRenderer implements IMusicRenderer {
       result += ` ${key}="${value}"`
     }
     
-    if (element.children || element.textContent) {
+    const hasChildren = element.children && element.children.length > 0
+    const hasTextContent = element.textContent !== undefined && element.textContent !== ''
+    
+    if (hasChildren || hasTextContent) {
       result += '>'
       
-      if (element.textContent) {
+      if (hasTextContent) {
         result += element.textContent
       }
       
-      if (element.children) {
-        for (const child of element.children) {
+      if (hasChildren) {
+        for (const child of element.children!) {
           result += this.elementToSVG(child)
         }
       }
