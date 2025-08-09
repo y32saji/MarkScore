@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mermaid Music Plugin Test</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f5f5f5;
+    }
+    
+    .test-container {
+      background: white;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .diagram-container {
+      margin: 20px 0;
+      padding: 20px;
+      background: #fafafa;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    
+    h2 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+    
+    .error {
+      color: #d32f2f;
+      background: #ffebee;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+    
+    .success {
+      color: #388e3c;
+      background: #e8f5e8;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Mermaid Music Plugin Test Page</h1>
+  
+  <div class="test-container">
+    <h2>Plugin Registration Test</h2>
+    <div id="plugin-status" class="error">Plugin not loaded</div>
+  </div>
+
+  <div class="test-container">
+    <h2>Basic Music Notation</h2>
+    <div class="diagram-container">
+      <div id="basic-music" class="mermaid">
+music-abc
+  clef treble
+  time 4/4
+  C4 q D4 q E4 q F4 q
+      </div>
+    </div>
+  </div>
+
+  <div class="test-container">
+    <h2>Music with Accidentals</h2>
+    <div class="diagram-container">
+      <div id="accidentals-music" class="mermaid">
+music-abc
+  clef treble
+  time 4/4
+  F#4 q Bb4 h G#5 e C4 s
+      </div>
+    </div>
+  </div>
+
+  <div class="test-container">
+    <h2>Complex Score</h2>
+    <div class="diagram-container">
+      <div id="complex-music" class="mermaid">
+music-abc
+  clef treble
+  time 6/8
+  C4 e D4 e E4 q F4 h G4 w
+  A4 s B4 s C5 q D5 e
+      </div>
+    </div>
+  </div>
+
+  <div class="test-container">
+    <h2>Bass Clef Test</h2>
+    <div class="diagram-container">
+      <div id="bass-music" class="mermaid">
+music-abc
+  clef bass
+  time 3/4
+  C3 q D3 q E3 h
+      </div>
+    </div>
+  </div>
+
+  <div class="test-container">
+    <h2>Error Handling Test</h2>
+    <div class="diagram-container">
+      <div id="error-music" class="mermaid">
+music-abc
+  invalid syntax here
+  bad clef unknown
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    // Initialize Mermaid
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'default',
+      securityLevel: 'loose',
+      fontFamily: 'Arial, sans-serif'
+    });
+
+    // Test plugin registration
+    async function testPluginRegistration() {
+      try {
+        // Import our plugin (this will be replaced with actual built plugin in tests)
+        const pluginStatusDiv = document.getElementById('plugin-status');
+        
+        // Check if Mermaid has plugin registration capabilities
+        if (typeof mermaid.registerPlugin === 'function') {
+          pluginStatusDiv.className = 'success';
+          pluginStatusDiv.textContent = 'Mermaid supports plugin registration';
+        } else {
+          pluginStatusDiv.className = 'error';
+          pluginStatusDiv.textContent = 'Mermaid does not support plugin registration';
+        }
+      } catch (error) {
+        const pluginStatusDiv = document.getElementById('plugin-status');
+        pluginStatusDiv.className = 'error';
+        pluginStatusDiv.textContent = `Plugin registration failed: ${error.message}`;
+      }
+    }
+
+    // Render all diagrams
+    async function renderDiagrams() {
+      try {
+        await mermaid.run({
+          nodes: document.querySelectorAll('.mermaid')
+        });
+      } catch (error) {
+        console.error('Failed to render diagrams:', error);
+      }
+    }
+
+    // Initialize everything
+    document.addEventListener('DOMContentLoaded', async () => {
+      await testPluginRegistration();
+      await renderDiagrams();
+    });
+
+    // Expose functions for testing
+    window.testPluginRegistration = testPluginRegistration;
+    window.renderDiagrams = renderDiagrams;
+  </script>
+</body>
+</html>

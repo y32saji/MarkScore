@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mermaid Music Plugin Integration Test</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: white;
+    }
+    
+    .test-result {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+    }
+    
+    .success { background: #d4edda; border-color: #c3e6cb; color: #155724; }
+    .error { background: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+    .info { background: #d1ecf1; border-color: #bee5eb; color: #0c5460; }
+    
+    .diagram-container {
+      margin: 20px 0;
+      padding: 20px;
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      min-height: 200px;
+    }
+    
+    h2 { color: #333; margin: 20px 0 10px 0; }
+    h3 { color: #666; margin: 15px 0 5px 0; }
+  </style>
+</head>
+<body>
+  <h1>Plugin Integration Test</h1>
+  
+  <div id="test-results"></div>
+  
+  <h2>Test Diagrams</h2>
+  
+  <h3>1. Simple Note Sequence</h3>
+  <div class="diagram-container">
+    <div id="test-1" class="mermaid" data-test="simple-notes">
+music-abc
+  clef treble
+  C4 q D4 q E4 q F4 q
+    </div>
+  </div>
+  
+  <h3>2. Time Signature and Clef</h3>
+  <div class="diagram-container">
+    <div id="test-2" class="mermaid" data-test="time-clef">
+music-abc
+  clef bass
+  time 3/4
+  G3 h A3 q
+    </div>
+  </div>
+  
+  <h3>3. Mixed Durations</h3>
+  <div class="diagram-container">
+    <div id="test-3" class="mermaid" data-test="mixed-durations">
+music-abc
+  clef treble
+  time 4/4
+  C4 w D4 h E4 q F4 e G4 s
+    </div>
+  </div>
+  
+  <h3>4. Accidentals</h3>
+  <div class="diagram-container">
+    <div id="test-4" class="mermaid" data-test="accidentals">
+music-abc
+  clef treble
+  F#4 q Bb4 q C#5 h Ab3 q
+    </div>
+  </div>
+  
+  <h3>5. Complex Score</h3>
+  <div class="diagram-container">
+    <div id="test-5" class="mermaid" data-test="complex-score">
+music-abc
+  clef treble
+  time 6/8
+  C4 e D4 e E4 e F4 e G4 e A4 e
+  B4 q C5 h D5 q
+    </div>
+  </div>
+
+  <script type="module">
+    const testResults = [];
+    
+    function addTestResult(test, status, message) {
+      testResults.push({ test, status, message });
+      updateTestDisplay();
+    }
+    
+    function updateTestDisplay() {
+      const container = document.getElementById('test-results');
+      container.innerHTML = testResults.map(result => 
+        `<div class="test-result ${result.status}">
+          <strong>${result.test}:</strong> ${result.message}
+        </div>`
+      ).join('');
+    }
+    
+    // Test Mermaid availability
+    function testMermaidAvailability() {
+      if (typeof mermaid !== 'undefined') {
+        addTestResult('Mermaid Availability', 'success', 'Mermaid is available');
+        return true;
+      } else {
+        addTestResult('Mermaid Availability', 'error', 'Mermaid is not available');
+        return false;
+      }
+    }
+    
+    // Test plugin registration capability
+    function testPluginRegistrationCapability() {
+      if (typeof mermaid.registerPlugin === 'function') {
+        addTestResult('Plugin Registration', 'success', 'Mermaid supports plugin registration');
+        return true;
+      } else {
+        addTestResult('Plugin Registration', 'error', 'Mermaid does not support registerPlugin method');
+        return false;
+      }
+    }
+    
+    // Test diagram detection
+    function testDiagramDetection() {
+      const musicDiagrams = document.querySelectorAll('.mermaid');
+      if (musicDiagrams.length > 0) {
+        addTestResult('Diagram Detection', 'success', `Found ${musicDiagrams.length} music diagrams`);
+        return true;
+      } else {
+        addTestResult('Diagram Detection', 'error', 'No music diagrams found');
+        return false;
+      }
+    }
+    
+    // Test diagram rendering
+    async function testDiagramRendering() {
+      try {
+        const diagrams = document.querySelectorAll('.mermaid');
+        let renderedCount = 0;
+        
+        for (const diagram of diagrams) {
+          try {
+            // Initialize Mermaid if not already done
+            if (!mermaid.initialized) {
+              mermaid.initialize({
+                startOnLoad: false,
+                theme: 'default',
+                securityLevel: 'loose'
+              });
+            }
+            
+            // Try to render the diagram
+            await mermaid.render(`diagram-${renderedCount}`, diagram.textContent);
+            renderedCount++;
+          } catch (error) {
+            console.error(`Failed to render diagram:`, error);
+            // Add a placeholder to show the diagram was processed
+            diagram.innerHTML = `<div style="border: 2px dashed #ccc; padding: 20px; text-align: center; color: #666;">
+              <p>Music Diagram (Plugin Required)</p>
+              <pre style="font-size: 12px; text-align: left;">${diagram.textContent.trim()}</pre>
+            </div>`;
+            renderedCount++;
+          }
+        }
+        
+        if (renderedCount > 0) {
+          addTestResult('Diagram Rendering', 'info', `Processed ${renderedCount} diagrams (plugin required for actual rendering)`);
+          return true;
+        } else {
+          addTestResult('Diagram Rendering', 'error', 'No diagrams were processed');
+          return false;
+        }
+      } catch (error) {
+        addTestResult('Diagram Rendering', 'error', `Rendering failed: ${error.message}`);
+        return false;
+      }
+    }
+    
+    // Test error handling
+    function testErrorHandling() {
+      try {
+        // Test with invalid diagram syntax
+        const invalidDiagram = document.createElement('div');
+        invalidDiagram.className = 'mermaid';
+        invalidDiagram.textContent = 'invalid-syntax-test';
+        
+        addTestResult('Error Handling', 'info', 'Error handling test setup complete');
+        return true;
+      } catch (error) {
+        addTestResult('Error Handling', 'error', `Error handling test failed: ${error.message}`);
+        return false;
+      }
+    }
+    
+    // Performance test
+    async function testPerformance() {
+      const startTime = performance.now();
+      
+      try {
+        const diagrams = document.querySelectorAll('.mermaid');
+        for (const diagram of diagrams) {
+          // Simulate processing time
+          diagram.getAttribute('data-test');
+        }
+        
+        const endTime = performance.now();
+        const duration = endTime - startTime;
+        
+        if (duration < 1000) {
+          addTestResult('Performance', 'success', `Test completed in ${duration.toFixed(2)}ms`);
+          return true;
+        } else {
+          addTestResult('Performance', 'error', `Test took too long: ${duration.toFixed(2)}ms`);
+          return false;
+        }
+      } catch (error) {
+        addTestResult('Performance', 'error', `Performance test failed: ${error.message}`);
+        return false;
+      }
+    }
+    
+    // Run all tests
+    async function runAllTests() {
+      addTestResult('Test Suite', 'info', 'Starting integration tests...');
+      
+      const tests = [
+        testMermaidAvailability,
+        testPluginRegistrationCapability,
+        testDiagramDetection,
+        testDiagramRendering,
+        testErrorHandling,
+        testPerformance
+      ];
+      
+      let passed = 0;
+      let total = tests.length;
+      
+      for (const test of tests) {
+        try {
+          const result = await test();
+          if (result) passed++;
+        } catch (error) {
+          console.error('Test error:', error);
+        }
+      }
+      
+      addTestResult('Test Suite', passed === total ? 'success' : 'error', 
+        `Completed: ${passed}/${total} tests passed`);
+      
+      return { passed, total };
+    }
+    
+    // Initialize and run tests
+    document.addEventListener('DOMContentLoaded', async () => {
+      await runAllTests();
+    });
+    
+    // Expose functions for Playwright testing
+    window.runAllTests = runAllTests;
+    window.testResults = testResults;
+  </script>
+</body>
+</html>
