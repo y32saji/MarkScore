@@ -109,7 +109,50 @@ export class MusicLexer {
   private scanIdentifierOrKeyword(): void {
     const start = this.position
     
-    // Only scan letters for identifiers/keywords, not alphanumeric
+    // First check if this is a single character that could be a duration
+    const firstChar = this.getCurrentChar()
+    const secondChar = this.input[this.position + 1]
+    
+    // Check if this is a single character or note+accidental pattern
+    if (this.isLetter(firstChar)) {
+      // Prioritize duration over note for single characters with no following accidental/digit
+      if (KEYWORDS.DURATIONS.includes(firstChar as any) && 
+          (!secondChar || (!this.isAccidental(secondChar) && !this.isDigit(secondChar)))) {
+        this.advance()
+        this.addToken(TokenType.DURATION, firstChar)
+        return
+      }
+      
+      // Check if this looks like a note pattern (letter + accidental)
+      if (secondChar && this.isAccidental(secondChar)) {
+        // Treat as note regardless of whether it's A-G (let parser validate)
+        this.advance()
+        this.addToken(TokenType.NOTE, firstChar.toUpperCase())
+        this.addToken(TokenType.ACCIDENTAL, secondChar)
+        this.advance()
+        return
+      }
+      
+      // Check if this is a single letter followed by a digit (note + octave pattern)
+      if (secondChar && this.isDigit(secondChar)) {
+        this.advance()
+        this.addToken(TokenType.NOTE, firstChar.toUpperCase())
+        return
+      }
+      
+      // Single letter followed by non-letter and not duration - could be note
+      if (this.position + 1 >= this.input.length || (!this.isLetter(secondChar ?? '') && !this.isDigit(secondChar ?? '') && !this.isAccidental(secondChar ?? ''))) {
+        if (this.isNoteLetter(firstChar)) {
+          this.advance()
+          this.addToken(TokenType.NOTE, firstChar.toUpperCase())
+          return
+        } else {
+          // Not a valid note letter, fall through to identifier parsing
+        }
+      }
+    }
+    
+    // Handle multi-character identifiers/keywords (like clef names)
     while (this.isLetter(this.getCurrentChar())) {
       this.advance()
     }
@@ -165,10 +208,13 @@ export class MusicLexer {
     return /[a-zA-Z]/.test(char)
   }
 
+  private isNoteLetter(char: string): boolean {
+    return /[A-G]/.test(char.toUpperCase())
+  }
+
   private isDigit(char: string): boolean {
     return /[0-9]/.test(char)
   }
-
 
   private isAccidental(char: string): boolean {
     return char === '#' || char === 'b'

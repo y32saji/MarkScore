@@ -89,7 +89,29 @@ export class MusicLexer {
     }
     scanIdentifierOrKeyword() {
         const start = this.position;
-        while (this.isAlphanumeric(this.getCurrentChar())) {
+        // Check if this is a single note letter followed by an accidental
+        const firstChar = this.getCurrentChar();
+        if (this.isNoteLetter(firstChar)) {
+            const secondChar = this.input[this.position + 1];
+            // If we have a single note letter followed by an accidental, handle them separately
+            if (secondChar && this.isAccidental(secondChar) && (this.position + 2 >= this.input.length || !this.isLetter(this.input[this.position + 2] ?? ''))) {
+                this.advance();
+                // Add the note token
+                this.addToken(TokenType.NOTE, firstChar.toUpperCase());
+                // Add the accidental token  
+                this.addToken(TokenType.ACCIDENTAL, secondChar);
+                this.advance();
+                return;
+            }
+            // If it's just a single note letter followed by non-letter, treat as note
+            if (this.position + 1 >= this.input.length || !this.isLetter(secondChar ?? '')) {
+                this.advance();
+                this.addToken(TokenType.NOTE, firstChar.toUpperCase());
+                return;
+            }
+        }
+        // Handle multi-character identifiers/keywords (like clef names)
+        while (this.isLetter(this.getCurrentChar())) {
             this.advance();
         }
         const value = this.input.substring(start, this.position);
@@ -129,11 +151,11 @@ export class MusicLexer {
     isLetter(char) {
         return /[a-zA-Z]/.test(char);
     }
+    isNoteLetter(char) {
+        return /[A-Ga-g]/.test(char);
+    }
     isDigit(char) {
         return /[0-9]/.test(char);
-    }
-    isAlphanumeric(char) {
-        return /[a-zA-Z0-9]/.test(char);
     }
     isAccidental(char) {
         return char === '#' || char === 'b';
