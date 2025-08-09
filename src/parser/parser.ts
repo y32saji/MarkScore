@@ -55,7 +55,15 @@ export class MusicParser {
         tokens: []
       }
     } catch (error) {
-      this.addError('Parsing failed: ' + (error as Error).message)
+      // Only add error if it hasn't been handled already by handleParseError
+      // Check if the error message is already in the errors list
+      const errorMessage = (error as Error).message
+      const alreadyHandled = this.errors.some(e => e.message.includes(errorMessage))
+      
+      if (!alreadyHandled) {
+        this.addError('Parsing failed: ' + errorMessage)
+      }
+      
       return {
         success: false,
         errors: this.errors,
@@ -326,9 +334,15 @@ export class MusicParser {
   }
 
   private handleParseError(error: Error): void {
-    this.addError(error.message)
+    // Include current token information in the error
+    const currentToken = this.tokenStream.current()
+    this.addError(error.message, currentToken)
     
-    if (!this.options.allowPartialParsing) {
+    // If maxErrors > 1, allow partial parsing to collect multiple errors
+    // Otherwise, respect the allowPartialParsing setting
+    const shouldContinue = this.options.allowPartialParsing || this.options.maxErrors > 1
+    
+    if (!shouldContinue) {
       throw error
     }
 

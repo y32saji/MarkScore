@@ -17,8 +17,8 @@ export declare class MusicLexer {
     private scanNumber;
     private getKeywordTokenType;
     private isLetter;
+    private isNoteLetter;
     private isDigit;
-    private isAlphanumeric;
     private isAccidental;
     private getCurrentChar;
     private advance;
