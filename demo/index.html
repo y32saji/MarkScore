@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mermaid Music Notation Plugin - Demo</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs" type="module"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .example-section {
+            background: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .example-title {
+            color: #333;
+            border-bottom: 2px solid #007acc;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .example-description {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .music-diagram {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 10px 0;
+            background: #fafafa;
+            border-radius: 4px;
+        }
+        .syntax-highlight {
+            background: #f8f8f8;
+            padding: 15px;
+            border-left: 4px solid #007acc;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #666;
+            border-top: 1px solid #ddd;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Mermaid Music Notation Plugin</h1>
+        <p>Interactive demonstrations of musical notation rendering</p>
+    </div>
+
+    <div class="grid">
+        <!-- Basic Clefs Section -->
+        <div class="example-section">
+            <h2 class="example-title">Treble Clef - Basic</h2>
+            <p class="example-description">Basic treble clef notation with quarter notes</p>
+            <div class="syntax-highlight">
+music-abc<br>
+&nbsp;&nbsp;clef treble<br>
+&nbsp;&nbsp;time 4/4<br>
+&nbsp;&nbsp;C4 q D4 q E4 q F4 q
+            </div>
+            <div class="music-diagram" id="treble-basic"></div>
+        </div>
+
+        <div class="example-section">
+            <h2 class="example-title">Bass Clef - Basic</h2>
+            <p class="example-description">Basic bass clef notation with quarter notes</p>
+            <div class="syntax-highlight">
+music-abc<br>
+&nbsp;&nbsp;clef bass<br>
+&nbsp;&nbsp;time 4/4<br>
+&nbsp;&nbsp;C3 q D3 q E3 q F3 q
+            </div>
+            <div class="music-diagram" id="bass-basic"></div>
+        </div>
+
+        <div class="example-section">
+            <h2 class="example-title">Alto Clef - Basic</h2>
+            <p class="example-description">Basic alto clef (C clef) notation with quarter notes</p>
+            <div class="syntax-highlight">
+music-abc<br>
+&nbsp;&nbsp;clef alto<br>
+&nbsp;&nbsp;time 4/4<br>
+&nbsp;&nbsp;C4 q D4 q E4 q F4 q
+            </div>
+            <div class="music-diagram" id="alto-basic"></div>
+        </div>
+
+        <div class="example-section">
+            <h2 class="example-title">Tenor Clef - Basic</h2>
+            <p class="example-description">Basic tenor clef (C clef) notation with quarter notes</p>
+            <div class="syntax-highlight">
+music-abc<br>
+&nbsp;&nbsp;clef tenor<br>
+&nbsp;&nbsp;time 4/4<br>
+&nbsp;&nbsp;C4 q D4 q E4 q F4 q
+            </div>
+            <div class="music-diagram" id="tenor-basic"></div>
+        </div>
+
+        <!-- Time Signatures Section -->
+        <div class="example-section">
+            <h2 class="example-title">Time Signature 3/4</h2>
+            <p class="example-description">Waltz time with three quarter notes per measure</p>
+            <div class="syntax-highlight">
+music-abc<br>
+&nbsp;&nbsp;clef treble<br>
+&nbsp;&nbsp;time 3/4<br>
+&nbsp;&nbsp;C4 q D4 q E4 q
+            </div>
+            <div class="music-diagram" id="time-3-4"></div>
+        </div>
+
+        <div class="example-section">
+            <h2 class="example-title">Time Signature 2/4</h2>
+            <p class="example-description">Two quarter notes per measure</p>
+            <div class="syntax-highlight">
+music-abc<br>
+&nbsp;&nbsp;clef treble<br>
+&nbsp;&nbsp;time 2/4<br>
+&nbsp;&nbsp;C4 q D4 q
+            </div>
+            <div class="music-diagram" id="time-2-4"></div>
+        </div>
+
+        <div class="example-section">
+            <h2 class="example-title">Time Signature 6/8</h2>
+            <p class="example-description">Six eighth notes per measure</p>
+            <div class="syntax-highlight">
+music-abc<br>
+&nbsp;&nbsp;clef treble<br>
+&nbsp;&nbsp;time 6/8<br>
+&nbsp;&nbsp;C4 e D4 e E4 e F4 e G4 e A4 e
+            </div>
+            <div class="music-diagram" id="time-6-8"></div>
+        </div>
+
+        <!-- Accidentals Section -->
+        <div class="example-section">
+            <h2 class="example-title">Sharp Accidentals</h2>
+            <p class="example-description">Notes with sharp (♯) accidentals</p>
+            <div class="syntax-highlight">
+music-abc<br>
+&nbsp;&nbsp;clef treble<br>
+&nbsp;&nbsp;time 4/4<br>
+&nbsp;&nbsp;C#4 q D#4 q F#4 q G#4 q
+            </div>
+            <div class="music-diagram" id="accidentals-sharp"></div>
+        </div>
+
+        <div class="example-section">
+            <h2 class="example-title">Flat Accidentals</h2>
+            <p class="example-description">Notes with flat (♭) accidentals</p>
+            <div class="syntax-highlight">
+music-abc<br>
+&nbsp;&nbsp;clef treble<br>
+&nbsp;&nbsp;time 4/4<br>
+&nbsp;&nbsp;Db4 q Eb4 q Gb4 q Ab4 q
+            </div>
+            <div class="music-diagram" id="accidentals-flat"></div>
+        </div>
+
+        <!-- Complex Examples -->
+        <div class="example-section">
+            <h2 class="example-title">Mixed Note Durations</h2>
+            <p class="example-description">Various note durations in a single measure</p>
+            <div class="syntax-highlight">
+music-abc<br>
+&nbsp;&nbsp;clef treble<br>
+&nbsp;&nbsp;time 4/4<br>
+&nbsp;&nbsp;C4 w D4 h E4 q F4 e G4 s
+            </div>
+            <div class="music-diagram" id="mixed-durations"></div>
+        </div>
+
+        <div class="example-section">
+            <h2 class="example-title">Complex Melody</h2>
+            <p class="example-description">Complex melody with mixed accidentals and durations</p>
+            <div class="syntax-highlight">
+music-abc<br>
+&nbsp;&nbsp;clef treble<br>
+&nbsp;&nbsp;time 6/8<br>
+&nbsp;&nbsp;C4 e D#4 e E4 q F#4 e G4 e Ab4 q<br>
+&nbsp;&nbsp;B4 h C5 e Db5 s Eb5 s F5 q
+            </div>
+            <div class="music-diagram" id="complex-melody"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Mermaid Music Notation Plugin Demo</p>
+        <p>This demo showcases the plugin's capability to render musical notation from markdown-like syntax.</p>
+    </div>
+
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: false,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#007acc',
+                secondaryColor: '#f5f5f5'
+            }
+        });
+
+        // Mock plugin for demonstration purposes
+        const mockMusicPlugin = {
+            id: 'music',
+            detector: (text) => text.includes('music-abc'),
+            parser: {
+                parse: (input) => {
+                    const lines = input.split('\n').filter(line => line.trim());
+                    const elements = [];
+                    
+                    for (const line of lines) {
+                        const trimmed = line.trim();
+                        if (trimmed.startsWith('clef ')) {
+                            elements.push({ type: 'clef', value: trimmed.split(' ')[1] });
+                        } else if (trimmed.startsWith('time ')) {
+                            const [num, denom] = trimmed.split(' ')[1].split('/');
+                            elements.push({ type: 'timeSignature', numerator: parseInt(num), denominator: parseInt(denom) });
+                        } else if (trimmed.match(/[A-G][#b]?[0-9]\s+[qhwes]/)) {
+                            const parts = trimmed.split(/\s+/);
+                            for (let i = 0; i < parts.length; i += 2) {
+                                if (parts[i] && parts[i + 1]) {
+                                    elements.push({ type: 'note', pitch: parts[i], duration: parts[i + 1] });
+                                }
+                            }
+                        }
+                    }
+                    
+                    return { elements, valid: true };
+                }
+            },
+            renderer: {
+                draw: (text, id) => {
+                    const container = document.getElementById(id);
+                    if (!container) return null;
+                    
+                    const parseResult = mockMusicPlugin.parser.parse(text);
+                    
+                    let svg = '<svg width="600" height="150" xmlns="http://www.w3.org/2000/svg" aria-label="Musical score">';
+                    svg += '<rect width="600" height="150" fill="#ffffff" />';
+                    
+                    // Add staff lines
+                    for (let i = 0; i < 5; i++) {
+                        const y = 50 + (i * 8);
+                        svg += `<line x1="20" y1="${y}" x2="580" y2="${y}" stroke="#000000" stroke-width="1" aria-hidden="true" />`;
+                    }
+                    
+                    let x = 50;
+                    for (const element of parseResult.elements) {
+                        if (element.type === 'clef') {
+                            // Simple clef representation
+                            if (element.value === 'treble') {
+                                svg += `<path d="M ${x} 82 C ${x} 72, ${x + 15} 62, ${x + 15} 72 C ${x + 15} 82, ${x} 92, ${x} 82 Z" fill="#000000" aria-label="treble clef" />`;
+                            } else if (element.value === 'bass') {
+                                svg += `<circle cx="${x + 8}" cy="70" r="6" fill="none" stroke="#000000" stroke-width="2" aria-label="bass clef" />`;
+                                svg += `<circle cx="${x + 18}" cy="66" r="2" fill="#000000" />`;
+                                svg += `<circle cx="${x + 18}" cy="74" r="2" fill="#000000" />`;
+                            } else {
+                                svg += `<path d="M ${x} 66 L ${x + 15} 66 M ${x + 7} 58 L ${x + 7} 74" stroke="#000000" stroke-width="2" aria-label="${element.value} clef" />`;
+                            }
+                            x += 40;
+                        } else if (element.type === 'timeSignature') {
+                            svg += `<text x="${x}" y="68" font-size="14" font-family="serif" aria-label="Time signature ${element.numerator}/${element.denominator}">${element.numerator}</text>`;
+                            svg += `<text x="${x}" y="84" font-size="14" font-family="serif" aria-hidden="true">${element.denominator}</text>`;
+                            x += 30;
+                        } else if (element.type === 'note') {
+                            // Note head position based on pitch
+                            const pitchMap = {'C': 90, 'D': 86, 'E': 82, 'F': 78, 'G': 74, 'A': 70, 'B': 66};
+                            const noteName = element.pitch.charAt(0);
+                            let y = pitchMap[noteName] || 74;
+                            
+                            // Handle accidentals
+                            if (element.pitch.includes('#')) {
+                                svg += `<text x="${x - 8}" y="${y + 3}" font-size="14">♯</text>`;
+                            } else if (element.pitch.includes('b')) {
+                                svg += `<text x="${x - 8}" y="${y + 3}" font-size="14">♭</text>`;
+                            }
+                            
+                            // Draw note based on duration
+                            if (element.duration === 'w') {
+                                // Whole note
+                                svg += `<ellipse cx="${x}" cy="${y}" rx="6" ry="4" fill="none" stroke="#000000" stroke-width="2" aria-label="${element.pitch} whole note" />`;
+                            } else if (element.duration === 'h') {
+                                // Half note
+                                svg += `<ellipse cx="${x}" cy="${y}" rx="5" ry="3" fill="none" stroke="#000000" stroke-width="2" aria-label="${element.pitch} half note" />`;
+                                svg += `<line x1="${x + 4}" y1="${y}" x2="${x + 4}" y2="${y - 20}" stroke="#000000" stroke-width="2" />`;
+                            } else {
+                                // Quarter, eighth, sixteenth notes
+                                svg += `<ellipse cx="${x}" cy="${y}" rx="5" ry="3" fill="#000000" aria-label="${element.pitch} ${element.duration} note" />`;
+                                svg += `<line x1="${x + 4}" y1="${y}" x2="${x + 4}" y2="${y - 20}" stroke="#000000" stroke-width="2" />`;
+                                
+                                if (element.duration === 'e') {
+                                    svg += `<path d="M ${x + 4} ${y - 20} Q ${x + 12} ${y - 15} ${x + 4} ${y - 12}" fill="#000000" />`;
+                                } else if (element.duration === 's') {
+                                    svg += `<path d="M ${x + 4} ${y - 20} Q ${x + 12} ${y - 15} ${x + 4} ${y - 12}" fill="#000000" />`;
+                                    svg += `<path d="M ${x + 4} ${y - 15} Q ${x + 12} ${y - 10} ${x + 4} ${y - 7}" fill="#000000" />`;
+                                }
+                            }
+                            x += 40;
+                        }
+                    }
+                    
+                    svg += '</svg>';
+                    container.innerHTML = svg;
+                    return svg;
+                }
+            }
+        };
+
+        // Demo data
+        const examples = [
+            { id: 'treble-basic', notation: 'music-abc\n  clef treble\n  time 4/4\n  C4 q D4 q E4 q F4 q' },
+            { id: 'bass-basic', notation: 'music-abc\n  clef bass\n  time 4/4\n  C3 q D3 q E3 q F3 q' },
+            { id: 'alto-basic', notation: 'music-abc\n  clef alto\n  time 4/4\n  C4 q D4 q E4 q F4 q' },
+            { id: 'tenor-basic', notation: 'music-abc\n  clef tenor\n  time 4/4\n  C4 q D4 q E4 q F4 q' },
+            { id: 'time-3-4', notation: 'music-abc\n  clef treble\n  time 3/4\n  C4 q D4 q E4 q' },
+            { id: 'time-2-4', notation: 'music-abc\n  clef treble\n  time 2/4\n  C4 q D4 q' },
+            { id: 'time-6-8', notation: 'music-abc\n  clef treble\n  time 6/8\n  C4 e D4 e E4 e F4 e G4 e A4 e' },
+            { id: 'accidentals-sharp', notation: 'music-abc\n  clef treble\n  time 4/4\n  C#4 q D#4 q F#4 q G#4 q' },
+            { id: 'accidentals-flat', notation: 'music-abc\n  clef treble\n  time 4/4\n  Db4 q Eb4 q Gb4 q Ab4 q' },
+            { id: 'mixed-durations', notation: 'music-abc\n  clef treble\n  time 4/4\n  C4 w D4 h E4 q F4 e G4 s' },
+            { id: 'complex-melody', notation: 'music-abc\n  clef treble\n  time 6/8\n  C4 e D#4 e E4 q F#4 e G4 e Ab4 q\n  B4 h C5 e Db5 s Eb5 s F5 q' }
+        ];
+
+        // Render all examples
+        examples.forEach(example => {
+            try {
+                mockMusicPlugin.renderer.draw(example.notation, example.id);
+            } catch (error) {
+                console.warn(`Failed to render ${example.id}:`, error);
+            }
+        });
+    </script>
+</body>
+</html>
